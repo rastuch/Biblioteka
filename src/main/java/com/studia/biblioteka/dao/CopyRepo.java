@@ -1,6 +1,8 @@
-package com.studia.biblioteka.dao.entity;
+package com.studia.biblioteka.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.studia.biblioteka.dao.entity.Copy;
+import org.springframework.data.repository.CrudRepository;
 
-public interface CopyRepo extends JpaRepository<Copy, Long> {
+public interface CopyRepo extends CrudRepository<Copy, Long> {
+
 }
