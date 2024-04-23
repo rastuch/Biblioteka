@@ -1,8 +1,13 @@
 package com.studia.biblioteka.manager;
 
 import com.studia.biblioteka.dao.UserRepo;
+import com.studia.biblioteka.dao.entity.Fine;
+import com.studia.biblioteka.dao.entity.Loan;
+import com.studia.biblioteka.dao.entity.Reservation;
 import com.studia.biblioteka.dao.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,5 +34,20 @@ public class UserManager {
     public void delete(Long id) {
         userRepo.deleteById(id);
     }
+
+    public Optional<User> authenticate(String email, String password) {
+        return userRepo.findByEmail(email)
+                .filter(user -> user.getPassword().equals(password));
+    }
+
+    public Boolean isEmailExist(String email) {
+        return userRepo.findByEmail(email).isPresent();
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void fillDbHelper() {
+        save(new User(1L, "admin", "admin@admin.pl", "ADMIN", "admin", null, null, null ));
+    }
+
 
 }

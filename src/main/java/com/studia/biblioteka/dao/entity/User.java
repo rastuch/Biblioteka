@@ -75,6 +75,37 @@ public class User {
         this.fines = fines;
     }
 
-    //builder
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Set<Loan> getLoans() {
+        return loans;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public Set<Fine> getFines() {
+        return fines;
+    }
+//builder
 
 }
