@@ -10,6 +10,7 @@ import java.util.Optional;
 @Service
 public class CategoryManager {
     private final CategoryRepo categoryRepo;
+
     @Autowired
     public CategoryManager(CategoryRepo categoryRepo){
         this.categoryRepo = categoryRepo;

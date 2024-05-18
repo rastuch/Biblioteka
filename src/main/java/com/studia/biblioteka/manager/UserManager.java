@@ -46,7 +46,7 @@ public class UserManager {
 
     @EventListener(ApplicationReadyEvent.class)
     public void fillDbHelper() {
-        save(new User(1L, "admin", "admin@admin.pl", "ADMIN", "admin", null, null, null ));
+        save(new User(1L, "admin", "", "admin@admin.pl", "ADMIN","admin","0000000", null, null, null ));
     }
 
 

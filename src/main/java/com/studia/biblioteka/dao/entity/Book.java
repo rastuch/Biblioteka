@@ -2,7 +2,6 @@ package com.studia.biblioteka.dao.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
 import java.util.Set;
 
 @Getter
@@ -47,3 +46,39 @@ public class Book {
     }
 // getters and setters
 }
+
+
+//@RestController
+//@RequestMapping("/api/category")
+//public class CategoryApi {
+//    private CategoryManager categories;
+//
+//    @Autowired
+//    public CategoryApi(CategoryManager categories) {
+//        this.categories = categories;
+//    }
+//
+//    @GetMapping
+//    public Optional<Category> getById(@RequestParam long id){
+//        return categories.findById(id);
+//    }
+//
+//    @GetMapping("/all") Iterable<Category> getAll(){
+//        return categories.findAll();
+//    }
+//
+//    @PostMapping
+//    public Category addUser(@RequestBody Category category){
+//        return categories.save(category);
+//    }
+//
+//    @PutMapping
+//    public Category updateUser(@RequestBody Category category){
+//        return categories.save(category);
+//    }
+//
+//    @DeleteMapping
+//    public void deleteUser(@RequestParam long id){
+//        categories.delete(id);
+//    }
+//}

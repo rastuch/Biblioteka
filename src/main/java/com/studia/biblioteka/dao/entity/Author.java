@@ -12,7 +12,8 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String biography;
 
     @ManyToMany(mappedBy = "authors")
@@ -21,20 +22,30 @@ public class Author {
     public Author() {
 
     }
-    public Author(Long id, String name, String biography, Set<Book> books) {
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Author(Long id, String firstName, String lastName,String biography, Set<Book> books) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.biography = biography;
         this.books = books;
     }
-    // getters and setters
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+// getters and setters
 
     public void setId(Long id) {
         this.id = id;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.firstName = name;
     }
 
     public void setBiography(String biography) {

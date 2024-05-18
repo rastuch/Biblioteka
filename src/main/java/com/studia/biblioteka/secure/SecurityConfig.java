@@ -21,6 +21,11 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(HttpMethod.POST,"/api/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/swagger-resources/").permitAll()
+                .requestMatchers(HttpMethod.GET, "/error").permitAll() // Dodane zezwolenie dla strony błędu
                 .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()

@@ -24,7 +24,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("startuje");
 
         if (tokenStoreService == null) {
             ServletContext servletContext = request.getServletContext();

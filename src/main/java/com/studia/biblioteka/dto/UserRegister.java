@@ -1,28 +1,31 @@
 package com.studia.biblioteka.dto;
 
+import lombok.Getter;
+
+@Getter
 public class UserRegister {
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String password;
+    private String phoneNumber;
 
-    public String getEmail() {
-        return email;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
+
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public String getPassword() {
-        return password;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setPassword(String password) {

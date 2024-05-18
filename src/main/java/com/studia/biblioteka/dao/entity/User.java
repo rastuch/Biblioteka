@@ -12,10 +12,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String role;
     private String password;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "user")
     private Set<Loan> loans;
@@ -26,15 +28,29 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Fine> fines;
 
-    public User(Long id, String name, String email, String role, String password, Set<Loan> loans, Set<Reservation> reservations, Set<Fine> fines) {
+    public User(Long id, String firstName,String lastName, String email, String role, String password,String phoneNumber, Set<Loan> loans, Set<Reservation> reservations, Set<Fine> fines) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.role = role;
         this.password = password;
+        this.phoneNumber = phoneNumber;
         this.loans = loans;
         this.reservations = reservations;
         this.fines = fines;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public User() {
@@ -47,8 +63,12 @@ public class User {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public void setEmail(String email) {
@@ -79,8 +99,8 @@ public class User {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
     public String getEmail() {
