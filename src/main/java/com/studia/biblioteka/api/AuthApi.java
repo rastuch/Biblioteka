@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ import java.util.Optional;
 
 @RestController
 public class AuthApi {
+    private static final Logger logger = LoggerFactory.getLogger(AuthApi.class);
 
     @Autowired
     private UserManager userManager;
@@ -49,7 +52,7 @@ public class AuthApi {
     public ResponseEntity<Object> login(@RequestBody UserLogin login) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + (long) expirationDays * 3600 * 1000 * 24);
-
+        logger.info(login.getEmail());
         return userManager.authenticate(login.getEmail(), login.getPassword())
                 .map(user -> {
                     System.out.println(user.getEmail());
