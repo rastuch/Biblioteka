@@ -29,4 +29,10 @@ public class CategoryManager {
     public void delete(Long id) {
         categoryRepo.deleteById(id);
     }
+
+    public void fillDbHelper() {
+        save(new Category(1L, "FANTASY", null));
+        save(new Category(2L, "LITERATURA POLSKA",null));
+
+    }
 }
