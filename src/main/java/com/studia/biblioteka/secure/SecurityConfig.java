@@ -16,7 +16,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable());
-        http.cors(cors -> cors.disable());
         http
                 .authorizeRequests()
                 .requestMatchers(HttpMethod.POST,"/api/login").permitAll()
@@ -25,7 +24,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/swagger-resources/").permitAll()
-                .requestMatchers(HttpMethod.GET, "/error").permitAll() // Dodane zezwolenie dla strony błędu
+                .requestMatchers(HttpMethod.GET, "/error/**").permitAll() // Dodane zezwolenie dla strony błędu
                 .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
