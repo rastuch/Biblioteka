@@ -1,8 +1,6 @@
 package com.studia.biblioteka.manager;
 
-import com.studia.biblioteka.dao.CategoryRepo;
 import com.studia.biblioteka.dao.FineRepo;
-import com.studia.biblioteka.dao.entity.Category;
 import com.studia.biblioteka.dao.entity.Fine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

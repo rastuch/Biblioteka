@@ -2,8 +2,11 @@ package com.studia.biblioteka.dao.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import java.util.Set;
+import lombok.Setter;
+import lombok.Builder;
 
+@Builder
+@Setter
 @Getter
 @Entity
 public class Book {
@@ -11,14 +14,10 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+    private String authors;
+    private String category;
 
-    @ManyToMany
-    private Set<Author> authors;
-
-    @ManyToOne
-    private Category category;
-
-    public Book(Long id, String title, Set<Author> authors, Category category) {
+    public Book(Long id, String title, String authors, String category) {
         this.id = id;
         this.title = title;
         this.authors = authors;
@@ -29,21 +28,7 @@ public class Book {
 
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 // getters and setters
 }
 

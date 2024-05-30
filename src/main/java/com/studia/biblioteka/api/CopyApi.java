@@ -1,10 +1,12 @@
 package com.studia.biblioteka.api;
 
 import com.studia.biblioteka.dao.entity.Copy;
+import com.studia.biblioteka.dao.enums.CopyStatus;
 import com.studia.biblioteka.dto.ErrorResponse;
 import com.studia.biblioteka.dto.SuccessResponse;
 import com.studia.biblioteka.manager.CopyManager;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,7 +47,7 @@ public class CopyApi {
     @Operation(summary = "Get all copies")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all copies",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Copy[].class)))
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Copy.class))))
     })
     @GetMapping("/all")
     public Iterable<Copy> getAll() {
@@ -110,5 +112,15 @@ public class CopyApi {
             errorResponse.setMessage("Copy not found");
             return ResponseEntity.status(404).body(errorResponse);
         }
+    }
+
+    @Operation(summary = "All copy statuses")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All statuses",
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CopyStatus.class))))
+    })
+    @GetMapping("/statuses")
+    public ResponseEntity<CopyStatus[]> getCopyStatuses() {
+        return ResponseEntity.ok(CopyStatus.values());
     }
 }

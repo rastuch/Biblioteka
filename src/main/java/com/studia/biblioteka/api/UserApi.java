@@ -1,10 +1,12 @@
 package com.studia.biblioteka.api;
 
+import com.studia.biblioteka.dao.entity.Loan;
 import com.studia.biblioteka.dao.entity.User;
 import com.studia.biblioteka.dto.ErrorResponse;
 import com.studia.biblioteka.dto.SuccessResponse;
 import com.studia.biblioteka.manager.UserManager;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,7 +48,7 @@ public class UserApi {
     @Operation(summary = "Get all users")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all users",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = User[].class)))
+                    content = @Content(mediaType = "application/json",  array = @ArraySchema(schema = @Schema(implementation = User.class))))
     })
     @GetMapping("/all")
     public Iterable<User> getAll() {
