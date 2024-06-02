@@ -152,7 +152,7 @@ public class CopyApi {
                     content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Copy.class))))
     })
     @GetMapping("/allByBookId")
-    public Iterable<Copy> getAll(@RequestParam Long bookId) {
+    public Iterable<Copy> getAllByBookId(@RequestParam Long bookId) {
         return copies.findAllBookCopies(bookId);
     }
 }
