@@ -34,6 +34,10 @@ public class CopyManager {
     }
     public void deleteAllBookCopies(Long bookId) {deleteAllBookCopies(bookId);}
 
+    public Iterable<Copy> findAllBookCopies(Long bookId) {
+        return copyRepo.findAllByBook_Id(bookId);
+    }
+
     @EventListener(ApplicationReadyEvent.class)
     public void fillDbHelper() {
 //        save(Copy.builder().book(Book.builder().id(1L).build()).location("Dział Literatura Polska, 4 półka").status(CopyStatus.AVAILABLE).build());

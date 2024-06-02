@@ -145,4 +145,14 @@ public class CopyApi {
     public ResponseEntity<CopyStatus[]> getCopyStatuses() {
         return ResponseEntity.ok(CopyStatus.values());
     }
+
+    @Operation(summary = "Get all copies by book id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found all book copies",
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Copy.class))))
+    })
+    @GetMapping("/allByBookId")
+    public Iterable<Copy> getAll(@RequestParam Long bookId) {
+        return copies.findAllBookCopies(bookId);
+    }
 }

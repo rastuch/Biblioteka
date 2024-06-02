@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CopyRepo extends CrudRepository<Copy, Long> {
     void deleteAllByBook_Id(Long bookId);
+    Iterable<Copy> findAllByBook_Id(Long bookId);
 }
