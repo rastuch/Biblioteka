@@ -8,6 +8,7 @@ import com.studia.biblioteka.dao.enums.CopyStatus;
 import com.studia.biblioteka.dto.AddNewBook;
 import com.studia.biblioteka.dto.ErrorResponse;
 import com.studia.biblioteka.dto.SuccessResponse;
+import com.studia.biblioteka.manager.BookManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,15 +19,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/book")
 public class BookApi {
-    private BookRepo books;
+    private BookManager bookManager;
     private CopyRepo copies;
 
     @Autowired
-    public BookApi(BookRepo books,CopyRepo copies) {
-        this.books = books;
+    public BookApi(BookManager bookManager, CopyRepo copies) {
+        this.bookManager = bookManager;
         this.copies = copies;
     }
 
@@ -39,7 +42,7 @@ public class BookApi {
     })
     @GetMapping
     public ResponseEntity<Object> getById(@RequestParam long id) {
-        return books.findById(id)
+        return bookManager.findById(id)
                 .map(book -> ResponseEntity.ok((Object) book))
                 .orElseGet(() -> {
                     ErrorResponse errorResponse = new ErrorResponse();
@@ -51,11 +54,15 @@ public class BookApi {
     @Operation(summary = "Get all books")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all books",
-                    content = @Content(mediaType = "application/json",  array = @ArraySchema(schema = @Schema(implementation = Book.class))))
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Book.class))))
     })
     @GetMapping("/all")
-    public Iterable<Book> getAll() {
-        return books.findAll();
+    public Iterable<Book> getAll(@RequestParam(required = false) String search) {
+        if (search != null && !search.isEmpty()) {
+            return bookManager.findByKeyword(search);
+        } else {
+            return bookManager.findAll();
+        }
     }
 
     @Operation(summary = "Add a new book and copies with AVAILABLE status")
@@ -72,7 +79,7 @@ public class BookApi {
             newBook.setTitle(book.title);
             newBook.setCategory(book.category);
             newBook.setAuthors(book.authors);
-            Book savedBook = books.save(newBook);
+            Book savedBook = bookManager.save(newBook);
             for(int i = 0; i <= book.countOfCopy; i++){
                 Copy copy = Copy.builder()
                         .book(savedBook)
@@ -100,8 +107,8 @@ public class BookApi {
     })
     @PutMapping
     public ResponseEntity<Object> updateBook(@RequestBody Book book) {
-        if (books.findById(book.getId()).isPresent()) {
-            Book updatedBook = books.save(book);
+        if (bookManager.findById(book.getId()).isPresent()) {
+            Book updatedBook = bookManager.save(book);
             return ResponseEntity.ok(updatedBook);
         } else {
             ErrorResponse errorResponse = new ErrorResponse();
@@ -119,8 +126,8 @@ public class BookApi {
     @DeleteMapping
     public ResponseEntity<Object> deleteBook(@RequestParam long id) {
         copies.deleteAllByBook_Id(id);
-        if (books.findById(id).isPresent()) {
-            books.deleteById(id);
+        if (bookManager.findById(id).isPresent()) {
+            bookManager.delete(id);
             SuccessResponse successResponse = new SuccessResponse();
             successResponse.setMessage("Book and copies are deleted successfully");
             return ResponseEntity.ok(successResponse);
