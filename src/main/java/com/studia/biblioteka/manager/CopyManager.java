@@ -36,8 +36,8 @@ public class CopyManager {
 
     @EventListener(ApplicationReadyEvent.class)
     public void fillDbHelper() {
-        save(Copy.builder().book(Book.builder().id(1L).build()).location("Dział Literatura Polska, 4 półka").status(CopyStatus.AVAILABLE).build());
-        save(Copy.builder().book(Book.builder().id(2L).build()).location("Dział SF, 4 półka").status(CopyStatus.AVAILABLE).build());
-        save(Copy.builder().book(Book.builder().id(2L).build()).location("Dział SF, 4 półka").status(CopyStatus.AVAILABLE).build());
+//        save(Copy.builder().book(Book.builder().id(1L).build()).location("Dział Literatura Polska, 4 półka").status(CopyStatus.AVAILABLE).build());
+//        save(Copy.builder().book(Book.builder().id(2L).build()).location("Dział SF, 4 półka").status(CopyStatus.AVAILABLE).build());
+//        save(Copy.builder().book(Book.builder().id(2L).build()).location("Dział SF, 4 półka").status(CopyStatus.AVAILABLE).build());
     }
 }
