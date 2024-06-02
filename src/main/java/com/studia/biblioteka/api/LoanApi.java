@@ -148,4 +148,14 @@ public class LoanApi {
             return ResponseEntity.badRequest().body(errorResponse);
         }
     }
+
+    @Operation(summary = "All loan statuses")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All statuses",
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CopyStatus.class))))
+    })
+    @GetMapping("/statuses")
+    public ResponseEntity<LoanStatus[]> getCopyStatuses() {
+        return ResponseEntity.ok(LoanStatus.values());
+    }
 }
