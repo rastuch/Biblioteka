@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -51,8 +51,8 @@ public class UserApi {
                     content = @Content(mediaType = "application/json",  array = @ArraySchema(schema = @Schema(implementation = User.class))))
     })
     @GetMapping("/all")
-    public Iterable<User> getAll() {
-        return users.findAll();
+    public Iterable<User> getAll(@RequestParam(required = false)String search, @RequestParam(required = false) List<String> role) {
+        return users.findAll(search, role);
     }
 
     @Operation(summary = "Add a new user")

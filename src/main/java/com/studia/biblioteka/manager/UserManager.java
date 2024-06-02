@@ -1,9 +1,6 @@
 package com.studia.biblioteka.manager;
 
 import com.studia.biblioteka.dao.UserRepo;
-import com.studia.biblioteka.dao.entity.Fine;
-import com.studia.biblioteka.dao.entity.Loan;
-import com.studia.biblioteka.dao.entity.Reservation;
 import com.studia.biblioteka.dao.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -24,8 +21,16 @@ public class UserManager {
     public Optional<User> findById(Long id) {
         return userRepo.findById(id);
     }
-    public Iterable<User> findAll() {
-        return userRepo.findAll();
+    public Iterable<User> findAll(String search, List<String> role) {
+        if ((search == null || search.isEmpty()) && (role == null || role.isEmpty())) {
+            return userRepo.findAll();
+        } else if (search == null || search.isEmpty()) {
+            return userRepo.findAllByRoleIsIn(role);
+        } else if (role == null || role.isEmpty()) {
+            return userRepo.findAllByEmailContainingOrFirstNameContainingOrLastNameContainingOrPhoneNumberContaining(search);
+        } else {
+            return userRepo.findAllByEmailContainingOrFirstNameContainingOrLastNameContainingOrPhoneNumberContainingOrRoleIsIn(search,role);
+        }
     }
 
     public User save(User user) {
