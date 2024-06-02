@@ -1,5 +1,7 @@
 package com.studia.biblioteka.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -8,6 +10,7 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "app_user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +21,7 @@ public class User {
     private String role;
     private String password;
     private String phoneNumber;
+
 
     @OneToMany(mappedBy = "user")
     private Set<Loan> loans;

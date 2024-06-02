@@ -1,9 +1,12 @@
 package com.studia.biblioteka.api;
 
+import com.studia.biblioteka.dao.entity.Book;
 import com.studia.biblioteka.dao.entity.Copy;
 import com.studia.biblioteka.dao.enums.CopyStatus;
 import com.studia.biblioteka.dto.ErrorResponse;
+import com.studia.biblioteka.dto.NewCopy;
 import com.studia.biblioteka.dto.SuccessResponse;
+import com.studia.biblioteka.manager.BookManager;
 import com.studia.biblioteka.manager.CopyManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -12,17 +15,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RestController
 @RequestMapping("/api/copy")
 public class CopyApi {
     private CopyManager copies;
+    private BookManager books;
 
     @Autowired
-    public CopyApi(CopyManager copies) {
+    public CopyApi(CopyManager copies, BookManager books) {
+        this.books = books;
         this.copies = copies;
     }
 
@@ -59,13 +67,27 @@ public class CopyApi {
             @ApiResponse(responseCode = "200", description = "Copy added successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Copy.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Related book not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping
-    public ResponseEntity<Object> addCopy(@RequestBody Copy copy) {
+    public ResponseEntity<Object> addCopy(@RequestBody NewCopy copy) {
         try {
-            Copy savedCopy = copies.save(copy);
-            return ResponseEntity.ok(savedCopy);
+            Optional<Book> relatedBook = books.findById(copy.bookId);
+            if(relatedBook.isPresent()) {
+                Copy savedCopy = copies.save(Copy
+                        .builder()
+                        .book(relatedBook.get())
+                        .location(copy.location)
+                        .status(CopyStatus.AVAILABLE)
+                        .build());
+                return ResponseEntity.ok(savedCopy);
+            }else {
+                ErrorResponse errorResponse = new ErrorResponse();
+                errorResponse.setMessage("Related book not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            }
         } catch (RuntimeException e) {
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setMessage(e.getMessage());

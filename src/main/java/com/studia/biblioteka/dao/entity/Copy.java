@@ -1,4 +1,6 @@
 package com.studia.biblioteka.dao.entity;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.studia.biblioteka.dao.enums.CopyStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -9,6 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Copy {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

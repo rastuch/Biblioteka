@@ -1,12 +1,20 @@
 package com.studia.biblioteka.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.studia.biblioteka.dao.enums.LoanStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.Builder;
 
 import java.time.LocalDate;
 
 @Getter
+@Setter
+@Builder
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,43 +28,21 @@ public class Loan {
 
     private LocalDate loanDate;
     private LocalDate returnDate;
-    private String status;
+    private LoanStatus status;
+    private LocalDate maxReturnDate;
 
-    public Loan(Long id, Copy copy, User user, LocalDate loanDate, LocalDate returnDate, String status) {
+    public Loan(Long id, Copy copy, User user, LocalDate loanDate, LocalDate returnDate, LoanStatus status, LocalDate maxReturnDate) {
         this.id = id;
         this.copy = copy;
         this.user = user;
         this.loanDate = loanDate;
         this.returnDate = returnDate;
         this.status = status;
+        this.maxReturnDate = maxReturnDate;
     }
 
     public Loan() {
 
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCopy(Copy copy) {
-        this.copy = copy;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setLoanDate(LocalDate loanDate) {
-        this.loanDate = loanDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-// getters and setters
 }
