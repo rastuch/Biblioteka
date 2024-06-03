@@ -1,7 +1,5 @@
 package com.studia.biblioteka.api;
 
-import com.studia.biblioteka.dao.BookRepo;
-import com.studia.biblioteka.dao.CopyRepo;
 import com.studia.biblioteka.dao.entity.Book;
 import com.studia.biblioteka.dao.entity.Copy;
 import com.studia.biblioteka.dao.enums.CopyStatus;
@@ -9,6 +7,7 @@ import com.studia.biblioteka.dto.AddNewBook;
 import com.studia.biblioteka.dto.ErrorResponse;
 import com.studia.biblioteka.dto.SuccessResponse;
 import com.studia.biblioteka.manager.BookManager;
+import com.studia.biblioteka.manager.CopyManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,16 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/book")
 public class BookApi {
     private BookManager bookManager;
-    private CopyRepo copies;
+    private CopyManager copies;
 
     @Autowired
-    public BookApi(BookManager bookManager, CopyRepo copies) {
+    public BookApi(BookManager bookManager, CopyManager copies) {
         this.bookManager = bookManager;
         this.copies = copies;
     }
@@ -125,7 +122,7 @@ public class BookApi {
     })
     @DeleteMapping
     public ResponseEntity<Object> deleteBook(@RequestParam long id) {
-        copies.deleteAllByBook_Id(id);
+        copies.deleteAllBookCopies(id);
         if (bookManager.findById(id).isPresent()) {
             bookManager.delete(id);
             SuccessResponse successResponse = new SuccessResponse();

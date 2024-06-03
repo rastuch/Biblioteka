@@ -26,8 +26,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/error/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/console/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/console/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/book/all/**").permitAll()
-
                 .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
