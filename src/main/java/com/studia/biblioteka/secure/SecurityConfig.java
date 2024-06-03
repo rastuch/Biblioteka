@@ -24,10 +24,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/swagger-resources/").permitAll()
-                .requestMatchers(HttpMethod.GET, "/error/**").permitAll() // Dodane zezwolenie dla strony błędu
+                .requestMatchers(HttpMethod.GET, "/error/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/console/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/console/**").permitAll()
                 .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Allow frames from the same origin
+                )
                 .addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
