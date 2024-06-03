@@ -3,6 +3,8 @@ package com.studia.biblioteka.manager;
 import com.studia.biblioteka.dao.BookRepo;
 import com.studia.biblioteka.dao.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +35,13 @@ public class BookManager {
         bookRepo.deleteById(id);
     }
 
-    public List<Book> findByKeyword(String keyword) {
-        return bookRepo.findAllByKeyword(keyword);
+    @EventListener(ApplicationReadyEvent.class)
+    public void fillDbHelper() {
+        save(Book.builder().title("Dziady").authors("Adam Mickiewicz").category("Sztuka Teatralna").build());
+        save(Book.builder().title("Kongres futurologiczny").authors("Stanisław Lem").category("SF").build());
+    }
+
+    public Iterable<Book> findByKeyword(String search) {
+       return bookRepo.findAllByKeyword(search);
     }
 }
