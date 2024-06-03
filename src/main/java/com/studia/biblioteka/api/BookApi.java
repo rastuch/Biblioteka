@@ -1,5 +1,7 @@
 package com.studia.biblioteka.api;
 
+import com.studia.biblioteka.dao.BookRepo;
+import com.studia.biblioteka.dao.CopyRepo;
 import com.studia.biblioteka.dao.entity.Book;
 import com.studia.biblioteka.dao.entity.Copy;
 import com.studia.biblioteka.dao.enums.CopyStatus;
@@ -51,7 +53,7 @@ public class BookApi {
     @Operation(summary = "Get all books")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all books",
-                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Book.class))))
+                    content = @Content(mediaType = "application/json",  array = @ArraySchema(schema = @Schema(implementation = Book.class))))
     })
     @GetMapping("/all")
     public Iterable<Book> getAll(@RequestParam(required = false) String search) {
