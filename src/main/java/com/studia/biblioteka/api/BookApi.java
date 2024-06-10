@@ -1,15 +1,15 @@
 package com.studia.biblioteka.api;
 
-import com.studia.biblioteka.dao.BookRepo;
-import com.studia.biblioteka.dao.CopyRepo;
 import com.studia.biblioteka.dao.entity.Book;
 import com.studia.biblioteka.dao.entity.Copy;
 import com.studia.biblioteka.dao.enums.CopyStatus;
 import com.studia.biblioteka.dto.AddNewBook;
+import com.studia.biblioteka.dto.BookResponse;
 import com.studia.biblioteka.dto.ErrorResponse;
 import com.studia.biblioteka.dto.SuccessResponse;
 import com.studia.biblioteka.manager.BookManager;
 import com.studia.biblioteka.manager.CopyManager;
+import com.studia.biblioteka.utils.IterableUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +19,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/book")
@@ -35,14 +39,14 @@ public class BookApi {
     @Operation(summary = "Get book by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the book",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BookResponse.class))),
             @ApiResponse(responseCode = "404", description = "Book not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping
     public ResponseEntity<Object> getById(@RequestParam long id) {
         return bookManager.findById(id)
-                .map(book -> ResponseEntity.ok((Object) book))
+                .map(book -> ResponseEntity.ok((Object) bookManager.convertToBookResponse(book)))
                 .orElseGet(() -> {
                     ErrorResponse errorResponse = new ErrorResponse();
                     errorResponse.setMessage("Book not found");
@@ -53,15 +57,18 @@ public class BookApi {
     @Operation(summary = "Get all books")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all books",
-                    content = @Content(mediaType = "application/json",  array = @ArraySchema(schema = @Schema(implementation = Book.class))))
+                    content = @Content(mediaType = "application/json",  array = @ArraySchema(schema = @Schema(implementation = BookResponse.class))))
     })
     @GetMapping("/all")
-    public Iterable<Book> getAll(@RequestParam(required = false) String search) {
+    public List<BookResponse> getAll(@RequestParam(required = false) String search) {
+        List<Book> bookList = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
-            return bookManager.findByKeyword(search);
+            bookList = IterableUtils.toList(bookManager.findByKeyword(search));
         } else {
-            return bookManager.findAll();
+            bookList = IterableUtils.toList(bookManager.findAll());
         }
+        return bookList.stream().map(book -> bookManager.convertToBookResponse(book))
+                .collect(Collectors.toList());
     }
 
     @Operation(summary = "Add a new book and copies with AVAILABLE status")

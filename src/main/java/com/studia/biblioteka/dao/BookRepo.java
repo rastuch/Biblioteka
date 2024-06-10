@@ -1,6 +1,7 @@
 package com.studia.biblioteka.dao;
 
 import com.studia.biblioteka.dao.entity.Book;
+import com.studia.biblioteka.dto.BookResponse;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

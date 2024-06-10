@@ -62,7 +62,7 @@ public class LoanApi {
     @Operation(summary = "Add a new loan")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Loan added successfully",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Loan.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = SuccessResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "User or book not found",
@@ -152,7 +152,7 @@ public class LoanApi {
     @Operation(summary = "All loan statuses")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All statuses",
-                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CopyStatus.class))))
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LoanStatus.class))))
     })
     @GetMapping("/statuses")
     public ResponseEntity<LoanStatus[]> getCopyStatuses() {
