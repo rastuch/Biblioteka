@@ -21,6 +21,11 @@ public class ReservationManager {
         return reservationRepo.findAll();
     }
 
+    public Iterable<Reservation> findAllByUserId(Long userId) {
+        return reservationRepo.findAllByUserId(userId);
+    }
+
+
     public Reservation save(Reservation reservation) {
         return reservationRepo.save(reservation);
     }

@@ -21,6 +21,9 @@ public class FineManager {
     public Iterable<Fine> findAll() {
         return fineRepo.findAll();
     }
+    public Iterable<Fine> findAllByUserId(Long userId) {
+        return fineRepo.findAllByUserId(userId);
+    }
 
     public Fine save(Fine fine) {
         return fineRepo.save(fine);

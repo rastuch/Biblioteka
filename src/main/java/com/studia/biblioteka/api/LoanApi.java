@@ -112,6 +112,47 @@ public class LoanApi {
     }
     }
 
+    @Operation(summary = "Closing loan (User returning book)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Loan finished successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = SuccessResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Loan not found or is already finished",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/closeLoan")
+    public ResponseEntity<Object> closeLoan(@RequestParam long id) {
+        try {
+                var currentLoan = loans.findById(id);
+                if(currentLoan.isPresent() && currentLoan.get().getStatus() == LoanStatus.IN_PROGRESS){
+                    var loanToClose = currentLoan.get();
+                    loanToClose.setStatus(LoanStatus.FINISHED);
+                    loanToClose.setReturnDate(LocalDate.now());
+
+                    // change related copy status to AVAILABLE
+                    var currentCopy = copies.findById(id);
+                    if(currentCopy.isPresent() && currentCopy.get().getStatus() == CopyStatus.BORROWED){
+                        var copyToChange = currentCopy.get();
+                        copyToChange.setStatus(CopyStatus.AVAILABLE);
+                        var savedCopy = copies.save(copyToChange);
+                        loanToClose.setCopy(savedCopy);
+                    }
+
+                    loans.save(loanToClose);
+                    return ResponseEntity.ok().body("Loan finished successfully");
+            } else {
+                ErrorResponse errorResponse = new ErrorResponse();
+                errorResponse.setMessage("Loan or not found or is already finished");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            }
+        } catch (RuntimeException e) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
     @Operation(summary = "Update an existing loan")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Loan updated successfully",
