@@ -45,8 +45,15 @@ public class LoanApi {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping
-    public Optional<Loan> getById(@RequestParam long id) {
-        return loans.findById(id);
+    public ResponseEntity<Object> getById(@RequestParam long id) {
+      var loan = loans.findById(id);
+      if(loan.isPresent()){
+          return ResponseEntity.ok(loan);
+      }else {
+          ErrorResponse errorResponse = new ErrorResponse();
+          errorResponse.setMessage("Loan not found");
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+      }
     }
 
     @Operation(summary = "Get all loans")

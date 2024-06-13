@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Optional;
 
@@ -59,9 +60,8 @@ public class BookManager {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void fillDbHelper() {
-        save(Book.builder().title("Dziady").authors("Adam Mickiewicz").category("Sztuka Teatralna").build());
-        save(Book.builder().title("Kongres futurologiczny").authors("Stanisław Lem").category("SF").build());
+    public void resetSequence() {
+
     }
 
     public Iterable<Book> findByKeyword(String search) {

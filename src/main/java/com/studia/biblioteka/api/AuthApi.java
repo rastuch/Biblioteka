@@ -110,6 +110,7 @@ public class AuthApi {
                 errorResponse.setMessage("Email Already Exists");
                 return ResponseEntity.status(409).body(errorResponse);
             }
+            var users = userManager.findAll(null, null);
 
             User user = new User();
             user.setFirstName(userDto.getFirstName());
